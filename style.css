@@ -2,3 +2,58 @@
 style everything
 tables
 */
+
+@font-face {
+    font-family: SVTitle;
+    src: url(Stardew-Valley-Regular.ttf);
+}
+
+#title {
+    font-family: SVTitle;
+    background-color: orange;
+    color: brown;
+
+}
+
+body {
+	background: #000000 no-repeat center top fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#maindiv {
+    margin:auto;
+    text-align: center;
+}
+
+#maintable {
+    border-collapse: collapse;
+}
+
+#maintable td {
+    border: solid black;
+    border-collapse: collapse;
+}
+
+.settings {
+    display: flex;
+    margin: auto;
+	width: 600px;
+}
+
+.settings table {
+	margin: 4px auto;
+	flex-grow: inherit;
+}
+
+.settings table tr td {
+	padding: 4px 8px 4px 8px;
+	background: rgba(128,128,128,0.3);
+	border-radius: 4px;
+}
+
+.footer {
+    text-align: center;
+}
