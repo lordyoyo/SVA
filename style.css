@@ -1,19 +1,8 @@
 /*to do:
 style everything
 tables
+footer to be bottom floaty
 */
-
-@font-face {
-    font-family: SVTitle;
-    src: url(Stardew-Valley-Regular.ttf);
-}
-
-#title {
-    font-family: SVTitle;
-    background-color: orange;
-    color: brown;
-
-}
 
 body {
 	background: #000000 no-repeat center top fixed;
@@ -21,15 +10,37 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+    /*color: #ddd;*/
+}
+
+a {
+    color: lightsalmon;
+}
+
+a:hover {
+    color: pink;
+}
+
+#title {
+    margin: 20px auto 30px;
+    width: 450px;
+    height: 127px;
+    font-size: 60px;
+    background-image: url("img/svalogo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 #maindiv {
     margin:auto;
     text-align: center;
+    width: 600px;
+    background-color: rgba(204, 230, 255,0.67);
 }
 
 #maintable {
     border-collapse: collapse;
+    width: 600px;
 }
 
 #maintable td {
@@ -50,10 +61,14 @@ body {
 
 .settings table tr td {
 	padding: 4px 8px 4px 8px;
-	background: rgba(128,128,128,0.3);
+	background: rgba(204, 230, 255,0.67);
 	border-radius: 4px;
 }
 
 .footer {
+    margin: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
     text-align: center;
 }
