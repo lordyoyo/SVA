@@ -193,7 +193,7 @@ function calculate(aninums,profs,seasons,settings){
                             }
                             displayValue = (weightedPrice * produce.chance) / produce.days * value;
                             finalProducePrice = displayValue * 28 * seasons.num_months;
-                            anilist.push([animalData[animalKey].name, finalProducePrice, displayValue]);
+                            anilist.push([animalData[animalKey].name, Math.floor(finalProducePrice), Math.floor(displayValue)]);
                             break;
                         }
                     }

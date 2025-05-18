@@ -34,13 +34,13 @@ a:hover {
 #maindiv {
     margin:auto;
     text-align: center;
-    width: 600px;
+    width: 900px;
     background-color: rgba(204, 230, 255,0.67);
 }
 
 #maintable {
     border-collapse: collapse;
-    width: 600px;
+    width: 900px;
 }
 
 #maintable td {
@@ -51,18 +51,32 @@ a:hover {
 .settings {
     display: flex;
     margin: auto;
-	width: 600px;
+	width: 900px;
+/*    flex-wrap: wrap; /* Allow tables to wrap to the next line */
+    justify-content: center; /* Centers the tables horizontally */
 }
 
 .settings table {
-	margin: 4px auto;
-	flex-grow: inherit;
+	margin: 4px;
+    width: 300px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.settings table tr {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .settings table tr td {
 	padding: 4px 8px 4px 8px;
 	background: rgba(204, 230, 255,0.67);
 	border-radius: 4px;
+    width: 75px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.settings input[type="number"]{
+    width: 45px;
 }
 
 .footer {
