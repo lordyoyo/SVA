@@ -11,6 +11,7 @@ const animalData = {
                 "chance": 0,
                 basic: {
                     "price" : 50,
+                    "chance" : 0,
                     "processed" : {
                         "result":"mayo.basic",
                         "quantity":1
@@ -18,6 +19,7 @@ const animalData = {
                 },
                 silver: {
                     "price" : 62,
+                    "chance": 0.18779,
                     "processed" : {
                         "result":"mayo.basic",
                         "quantity":1
@@ -25,6 +27,7 @@ const animalData = {
                 },
                 gold: {
                     "price" : 75,
+                    "chance": 0.24556,
                     "processed" : {
                         "result":"mayo.basic",
                         "quantity":1
@@ -32,6 +35,7 @@ const animalData = {
                 },
                 iridium: {
                     "price" : 100,
+                    "chance": 0.56665,
                     "processed" : {
                         "result":"mayo.basic",
                         "quantity":1
@@ -453,7 +457,7 @@ const animalData = {
         }
     },
     "goat":{
-        "name" : "goat",
+        "name" : "Goat",
         "dataid" : "num_goat",
         "url" : "https://stardewvalleywiki.com/Goat",
         "produce" : {

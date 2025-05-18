@@ -28,20 +28,15 @@ if (bghour >= 6 && bghour < 18) {
 function refresh() {
     // Your refresh logic here.  For demonstration, we'll just log to the console.
     console.log("Input changed!  refresh() function called.");
-    //delete existing table
-    document.getElementById("maincontent").innerHTML = "";
     //create new table data
     const aninums = getaninums();
     const seasons = getseasons();
     updateprofessions(); //updating checkboxes
     const profs = getprofs();
-    //console.log(profs);
     const settings = {
         "smart": document.getElementById("check_smart").checked,
     }
-    //console.log(seasons);
-    //console.log(aninums);
-
+    calculate(aninums,profs,seasons,settings);
     //create new table
 
 }
@@ -173,6 +168,59 @@ function getprofs() {
         "bota" : document.getElementById('check_botanist').checked
     }
     return profs;
+}
+
+function calculate(aninums,profs,seasons,settings){
+    //logic:
+    //create an array of the valid animals
+    const anilist = [];
+    const prof =[];
+    for (const [key, value] of Object.entries(aninums)) {
+        if(value>0){
+            const dataid = key; // e.g., 'num_cows'
+            for (const animalKey in animalData) {
+                if (animalData[animalKey].dataid === dataid) {
+                    // Find the first produce item with a chance greater than 0
+                    for (const produceKey in animalData[animalKey].produce) {
+                        if (animalData[animalKey].produce[produceKey].chance > 0) {
+                            const produce = animalData[animalKey].produce[produceKey];
+                            // Calculate the weighted price in a generalized way
+                            let weightedPrice = 0;
+                            for (const qualityKey in produce) {
+                                if (produce[qualityKey] && typeof produce[qualityKey].price === 'number') {
+                                    weightedPrice += produce[qualityKey].price * (produce[qualityKey].chance || 0);
+                                }
+                            }
+                            displayValue = (weightedPrice * produce.chance) / produce.days * value;
+                            finalProducePrice = displayValue * 28 * seasons.num_months;
+                            anilist.push([animalData[animalKey].name, finalProducePrice, displayValue]);
+                            break;
+                        }
+                    }
+                    break; // Found a match, no need to keep searching other animals
+                }
+            }
+        }
+    }
+    //add the data to the table
+    const mainContent = document.getElementById("maincontent");
+    mainContent.innerHTML = ''; // Clear any existing content
+    for (const item of anilist) {
+        const row = document.createElement("tr");
+        const animalCell = document.createElement("td");
+        const profitCell = document.createElement("td");
+        const perDayCell = document.createElement("td");
+
+        animalCell.textContent = item[0];     // Animal Name
+        profitCell.textContent = item[1];     // Profit
+        perDayCell.textContent = item[2];    // Per Day
+
+        row.appendChild(animalCell);
+        row.appendChild(profitCell);
+        row.appendChild(perDayCell);
+        mainContent.appendChild(row);
+    }
+    //console.log(anilist);
 }
 //console.log(Object.keys(animalData).length);
 //console.log(Object.hasOwn(animalData.gold.produce.goldegg.basic,"coopchance"));
