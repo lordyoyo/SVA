@@ -5,6 +5,17 @@
 //hapiness?!
 //cheese aging
 
+//tableData constructor
+class tD {
+    constructor(animal, profit, perday) {
+        this.animal = animal;
+        this.profit = profit;
+        this.perday = perday;
+    }
+};
+
+var mainTD = new tD();
+
 //day and night background switch
 const bgdate = new Date();
 const bghour = bgdate.getHours();
@@ -20,20 +31,20 @@ function refresh() {
     //delete existing table
     document.getElementById("maincontent").innerHTML = "";
     //create new table data
-    
+    const aninums = getaninums();
+    const seasons = getseasons();
+    updateprofessions(); //updating checkboxes
+    const profs = getprofs();
+    //console.log(profs);
+    const settings = {
+        "smart": document.getElementById("check_smart").checked,
+    }
+    //console.log(seasons);
+    //console.log(aninums);
+
     //create new table
 
 }
-
-//tableData constructor
-class tD {
-    constructor(animal, profit, perday) {
-        this.animal = animal;
-        this.profit = profit;
-        this.perday = perday;
-    }
-};
-var mainTD = new tD();
 
 //this should fill up the tableData
 function recalculate() {
@@ -42,781 +53,126 @@ function recalculate() {
 window.onload = function() {
     // 1. Get all input elements in the document.
     var inputs = document.getElementsByTagName("input");
-
     // 2. Iterate through each input element.
     for (let i = 0; i < inputs.length; i++) {
         let input = inputs[i];
         // 3. Add the onchange event handler.
         input.onchange = refresh;
-    }
+    };
+    updateprofessions();
 };
 
-const animalData = {
-    "chicken":{
-        "name" : "Chicken",
-        "dataid" : "num_chicken",
-        "url" : "https://stardewvalleywiki.com/Chicken",
-        "produce" : {
-            egg: {
-                "name" : "Egg",
-                "days": 1,
-                "chance": 0,
-                basic: {
-                    "price" : 50,
-                    "processed" : {
-                        "result":"mayo.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 62,
-                    "processed" : {
-                        "result":"mayo.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 75,
-                    "processed" : {
-                        "result":"mayo.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 100,
-                    "processed" : {
-                        "result":"mayo.basic",
-                        "quantity":1
-                    }
-                }
-            },
-            largeegg: {
-                "name" : "Large Egg",
-                "days": 1,
-                "chance": 1,
-                basic: {
-                    "price" : 95,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 118,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 142,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 190,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":1
-                    }
-                }
-            }
+function getaninums() {
+  const elements = document.querySelectorAll('.aninum');
+  const list = {}; // Or use [] for an array of objects
+
+  elements.forEach(input => {
+    list[input.id] = input.value; // For object: { id: value }
+    // valuesWithIds.push({ id: input.id, value: input.value }); // For array of objects
+  });
+
+  return list; // Or return the array if you chose that structure
+}
+
+function getseasons() {
+  const springCheckbox = document.getElementById('check_spring');
+  const summerCheckbox = document.getElementById('check_summer');
+  const fallCheckbox = document.getElementById('check_fall');
+  const winterCheckbox = document.getElementById('check_winter');
+
+  const checkedCount =
+    (springCheckbox.checked ? 1 : 0) +
+    (summerCheckbox.checked ? 1 : 0) +
+    (fallCheckbox.checked ? 1 : 0) +
+    (winterCheckbox.checked ? 1 : 0);
+
+  const seasonData = {
+    num_months: checkedCount,
+    Spring: springCheckbox.checked,
+    Summer: summerCheckbox.checked,
+    Fall: fallCheckbox.checked,
+    Winter: winterCheckbox.checked,
+  };
+
+  return seasonData;
+}
+
+function updateprofessions() {
+    const numPlayers = parseInt(document.getElementById('num_players').value, 10); // Parse as integer
+
+    const arti = document.getElementById('check_artisan');
+    const ranc = document.getElementById('check_rancher');
+    const coop = document.getElementById('check_coopmaster');
+    const shep = document.getElementById('check_shepherd');
+    const gath = document.getElementById('check_gatherer');
+    const bota = document.getElementById('check_botanist');
+    
+    // 1. Permanent rule: Botanist depends on Gatherer
+    bota.disabled = !gath.checked;
+
+    // 2. Rancher, Coopmaster, and Shepherd dependencies
+    coop.disabled = (!ranc.checked || ranc.disabled);
+    shep.disabled = (!ranc.checked || ranc.disabled);
+
+    arti.disabled = false;
+    ranc.disabled = false;
+
+    // 3. logics
+    if (numPlayers === 2){
+        if (arti.checked && coop.checked){
+            shep.disabled = true;
+            shep.checked = false;
+        };
+        if (arti.checked && shep.checked){
+            coop.disabled = true;
+        };
+        if (shep.checked && coop.checked){
+            arti.disabled = true;
         }
-    },
-    "duck":{
-        "name" : "Duck",
-        "dataid" : "num_duck",
-        "url" : "https://stardewvalleywiki.com/Duck",
-        "produce" : {
-            duckegg: {
-                "name" : "Duck Egg",
-                "days": 2,
-                "chance": 0.709,
-                basic: {
-                    "price" : 95,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"duckmayo.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 118,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"duckmayo.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 142,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"duckmayo.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 190,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"duckmayo.basic",
-                        "quantity":1
-                    }
-                }
-            },
-            duckfeather: {
-                "name" : "Duck Feather",
-                "days": 2,
-                "chance": 0.291,
-                basic: {
-                    "price" : 250,
-                    "chance" : 0,
-                    "coopchance" : 0
-                },
-                silver: {
-                    "price" : 118,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121
-                },
-                gold: {
-                    "price" : 142,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564
-                },
-                iridium: {
-                    "price" : 190,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315
-                }
+    } else if (numPlayers === 1){
+        if (ranc.checked){
+            arti.disabled = true;
+            arti.checked = false;
+            if (coop.checked){
+                shep.disabled = true;
+                shep.checked = false;
             }
-        }
-    },
-    "rabbit":{
-        "name" : "Rabbit",
-        "dataid" : "num_rabbit",
-        "url" : "https://stardewvalleywiki.com/Rabbit",
-        "produce" : {
-            wool: {
-                "name" : "Wool",
-                "days": 4,
-                "chance": 0.7235,
-                basic: {
-                    "price" : 340,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 425,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1.1
-                    }
-                },
-                gold: {
-                    "price" : 510,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1.5
-                    }
-                },
-                iridium: {
-                    "price" : 680,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":2
-                    }
-                }
-            },
-            duckfeather: {
-                "name" : "Rabbit's Foot",
-                "days": 2,
-                "chance": 0.2765,
-                basic: {
-                    "price" : 565,
-                    "chance" : 0,
-                    "coopchance" : 0
-                },
-                silver: {
-                    "price" : 706,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121
-                },
-                gold: {
-                    "price" : 847,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564
-                },
-                iridium: {
-                    "price" : 1130,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315
-                }
+            if (shep.checked){
+                coop.disabled = true;
             }
-        }
-    },
-    "void":{
-        "name" : "Void Chicken",
-        "dataid" : "num_void",
-        "url" : "https://stardewvalleywiki.com/Void_Chicken",
-        "produce" : {
-            voidegg: {
-                "name" : "Void Egg",
-                "days": 1,
-                "chance": 1,
-                basic: {
-                    "price" : 65,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"voidmayo.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 81,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"voidmayo.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 97,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"voidmayo.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 130,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"voidmayo.basic",
-                        "quantity":1
-                    }
-                }
-            }
-        }
-    },
-    "dino":{
-        "name" : "Dinosaur",
-        "dataid" : "num_dino",
-        "url" : "https://stardewvalleywiki.com/Dinosaur",
-        "produce" : {
-            dinoegg: {
-                "name" : "Dinosaur Egg",
-                "days": 7,
-                "chance": 1,
-                basic: {
-                    "price" : 350,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"dinomayo.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 437,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"dinomayo.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 525,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"dinomayo.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 700,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"dinomayo.basic",
-                        "quantity":1
-                    }
-                }
-            }
-        }
-    },
-    "gold":{
-        "name" : "Golden Chicken",
-        "dataid" : "num_gold",
-        "url" : "https://stardewvalleywiki.com/Golden_Chicken",
-        "produce" : {
-            goldegg: {
-                "name" : "Golden Egg",
-                "days": 1,
-                "chance": 1,
-                basic: {
-                    "price" : 500,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":3
-                    }
-                },
-                silver: {
-                    "price" : 625,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":3
-                    }
-                },
-                gold: {
-                    "price" : 750,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":3
-                    }
-                },
-                iridium: {
-                    "price" : 1000,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":3
-                    }
-                }
-            }
-        }
-    },
-    "cow":{
-        "name" : "Cow",
-        "dataid" : "num_cow",
-        "url" : "https://stardewvalleywiki.com/Cow",
-        "produce" : {
-            milk: {
-                "name" : "Milk",
-                "days": 1,
-                "chance": 0,
-                basic: {
-                    "price" : 125,
-                    "chance" : 0,
-                    "processed" : {
-                        "result":"cheese.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 156,
-                    "chance": 0.18779,
-                    "processed" : {
-                        "result":"cheese.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 187,
-                    "chance": 0.24556,
-                    "processed" : {
-                        "result":"cheese.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 250,
-                    "chance": 0.56665,
-                    "processed" : {
-                        "result":"cheese.basic",
-                        "quantity":1
-                    }
-                }
-            },
-            largemilk: {
-                "name" : "Large Milk",
-                "days": 1,
-                "chance": 1,
-                basic: {
-                    "price" : 190,
-                    "chance" : 0,
-                    "processed" : {
-                        "result":"cheese.gold",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 237,
-                    "chance": 0.18779,
-                    "processed" : {
-                        "result":"cheese.gold",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 285,
-                    "chance": 0.24556,
-                    "processed" : {
-                        "result":"cheese.gold",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 380,
-                    "chance": 0.56665,
-                    "processed" : {
-                        "result":"cheese.gold",
-                        "quantity":1
-                    }
-                }
-            }
-        }
-    },
-    "goat":{
-        "name" : "goat",
-        "dataid" : "num_goat",
-        "url" : "https://stardewvalleywiki.com/Goat",
-        "produce" : {
-            goatmilk: {
-                "name" : "Goat Milk",
-                "days": 2,
-                "chance": 0,
-                basic: {
-                    "price" : 225,
-                    "chance" : 0,
-                    "processed" : {
-                        "result":"goatcheese.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 281,
-                    "chance": 0.18779,
-                    "processed" : {
-                        "result":"goatcheese.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 337,
-                    "chance": 0.24556,
-                    "processed" : {
-                        "result":"goatcheese.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 450,
-                    "chance": 0.56665,
-                    "processed" : {
-                        "result":"goatcheese.basic",
-                        "quantity":1
-                    }
-                }
-            },
-            largegoatmilk: {
-                "name" : "Large Goat Milk",
-                "days": 2,
-                "chance": 1,
-                basic: {
-                    "price" : 345,
-                    "chance" : 0,
-                    "processed" : {
-                        "result":"goatcheese.gold",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 431,
-                    "chance": 0.18779,
-                    "processed" : {
-                        "result":"goatcheese.gold",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 517,
-                    "chance": 0.24556,
-                    "processed" : {
-                        "result":"goatcheese.gold",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 690,
-                    "chance": 0.56665,
-                    "processed" : {
-                        "result":"goatcheese.gold",
-                        "quantity":1
-                    }
-                }
-            }
-        }
-    },
-    "sheep":{
-        "name" : "Sheep",
-        "dataid" : "num_sheep",
-        "url" : "https://stardewvalleywiki.com/Sheep",
-        "produce" : {
-            wool: {
-                "name" : "Wool",
-                "days": 2,
-                "shepdays": 1,
-                "chance": 0.7235,
-                basic: {
-                    "price" : 340,
-                    "chance" : 0,
-                    "shepchance" : 0,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 425,
-                    "chance": 0.18779,
-                    "shepchance": 0.07121,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1.1
-                    }
-                },
-                gold: {
-                    "price" : 510,
-                    "chance": 0.24556,
-                    "shepchance": 0.19564,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":1.5
-                    }
-                },
-                iridium: {
-                    "price" : 680,
-                    "chance": 0.56665,
-                    "shepchance": 0.73315,
-                    "processed" : {
-                        "result":"cloth.basic",
-                        "quantity":2
-                    }
-                }
-            }
-        }
-    },
-    "pig":{
-        "name" : "Pig",
-        "dataid" : "num_pig",
-        "url" : "https://stardewvalleywiki.com/Pig",
-        "produce" : {
-            truffle: {
-                "name" : "Truffle",
-                "days": 1/3,
-                "chance": 1,
-                basic: {
-                    "price" : 625,
-                    "chance" : 0.22,
-                    "botchance" : 0,
-                    "processed" : {
-                        "result":"truffleoil.basic",
-                        "quantity":1
-                    }
-                },
-                silver: {
-                    "price" : 781,
-                    "chance": 0.45,
-                    "botchance": 0,
-                    "processed" : {
-                        "result":"truffleoil.basic",
-                        "quantity":1
-                    }
-                },
-                gold: {
-                    "price" : 937,
-                    "chance": 0.33,
-                    "botchance": 0,
-                    "processed" : {
-                        "result":"truffleoil.basic",
-                        "quantity":1
-                    }
-                },
-                iridium: {
-                    "price" : 1250,
-                    "chance": 0,
-                    "botchance": 1,
-                    "processed" : {
-                        "result":"truffleoil.basic",
-                        "quantity":1
-                    }
-                }
-            }
-        }
-    },
-    "ostrich":{
-        "name" : "Ostrich",
-        "dataid" : "num_ostrich",
-        "url" : "https://stardewvalleywiki.com/Ostrich",
-        "produce" : {
-            ostrichegg: {
-                "name" : "Ostrich Egg",
-                "days": 7,
-                "chance": 1,
-                basic: {
-                    "price" : 600,
-                    "chance" : 0,
-                    "coopchance" : 0,
-                    "processed" : {
-                        "result":"mayo.basic",
-                        "quantity":10
-                    }
-                },
-                silver: {
-                    "price" : 750,
-                    "chance": 0.18779,
-                    "coopchance": 0.07121,
-                    "processed" : {
-                        "result":"mayo.silver",
-                        "quantity":10
-                    }
-                },
-                gold: {
-                    "price" : 900,
-                    "chance": 0.24556,
-                    "coopchance": 0.19564,
-                    "processed" : {
-                        "result":"mayo.gold",
-                        "quantity":10
-                    }
-                },
-                iridium: {
-                    "price" : 1200,
-                    "chance": 0.56665,
-                    "coopchance": 0.73315,
-                    "processed" : {
-                        "result":"mayo.iridium",
-                        "quantity":10
-                    }
-                }
-            }
+        };
+        if (arti.checked){
+            ranc.disabled = true;
         }
     }
-};
-
-const produceData = {
-    "mayo":{
-        "name": "Mayonnaise",
-        basic: {
-            "price" : 190,
-        },
-        silver: {
-            "price" : 237,
-        },
-        gold: {
-            "price" : 285,
-        },
-        iridium: {
-            "price" : 380,
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "duckmayo":{
-        "name": "Duck Mayonnaise",
-        basic: {
-            "price": 375
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "dinokmayo":{
-        "name": "Dinosaur Mayonnaise",
-        basic: {
-            "price": 800
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "voidmayo":{
-        "name": "Void Mayonnaise",
-        basic: {
-            "price": 275
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "cloth":{
-        "name": "Cloth",
-        basic: {
-            "price": 470
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "cheese":{
-        "name": "Cheese",
-        basic: {
-            "price" : 230,
-        },
-        silver: {
-            "price" : 287,
-        },
-        gold: {
-            "price" : 345,
-        },
-        iridium: {
-            "price" : 460,
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
-    },
-    "goatcheese":{
-        "name": "Goat Cheese",
-        basic: {
-            "price" : 400,
-        },
-        silver: {
-            "price" : 500,
-        },
-        gold: {
-            "price" : 600,
-        },
-        iridium: {
-            "price" : 800,
-        },
-        "rancher" : 1.2,
-        "artisan" : 1.4
+    // 4. Unchecking logic (applied at the end)
+    if (arti.disabled) {
+        arti.checked = false;
+    }
+    if (ranc.disabled) {
+        ranc.checked = false;
+    }
+    if (coop.disabled) {
+        coop.checked = false;
+    }
+    if (shep.disabled) {
+        shep.checked = false;
+    }
+    if (bota.disabled) {
+        bota.checked = false;
     }
 }
 
+function getprofs() {
+    const profs = {
+        "arti": document.getElementById('check_artisan').checked,
+        "ranc" : document.getElementById('check_rancher').checked,
+        "coop" : document.getElementById('check_coopmaster').checked,
+        "shep" : document.getElementById('check_shepherd').checked,
+        "gath" : document.getElementById('check_gatherer').checked,
+        "bota" : document.getElementById('check_botanist').checked
+    }
+    return profs;
+}
 //console.log(Object.keys(animalData).length);
 //console.log(Object.hasOwn(animalData.gold.produce.goldegg.basic,"coopchance"));
