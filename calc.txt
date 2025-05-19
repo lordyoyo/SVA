@@ -1,0 +1,32 @@
+calculations:
+
+multiply:
+seasons (special with pigs)
+28 (special with pigs)
+1/days (special with sheep)
+chance
+number of aminals
+
+this is base multiplier for produces
+
+for the four rarities:
+    [done]calculate chance or coopchance or shepchance or botchance
+    check if we process, if we do:
+        processed.result.split(".")
+        produceData[split[0]][split[1]].price
+        multiply by quantity
+            multiply by arti if it exists and ranc if it doesn't or just leave it if neither
+            get the name
+        or take the price if it doesn't exist
+        take name
+        multiply this by calculated chance
+            multiply by ranc if not pigs
+    if we don't
+        take the price
+        take name
+        multiply by calculated chance
+            multiply by ranc if not pigs
+    multi by 1.2 if pig and gath
+put it in array of arrays
+    sum up whatevers
+divide by season number and 28 for perday
