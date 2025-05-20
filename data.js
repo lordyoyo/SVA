@@ -148,17 +148,17 @@ const animalData = {
                         "coopchance": 0
                     },
                     silver: {
-                        "price": 118,
+                        "price": 312,
                         "chance": 0.18779,
                         "coopchance": 0.07121
                     },
                     gold: {
-                        "price": 142,
+                        "price": 375,
                         "chance": 0.24556,
                         "coopchance": 0.19564
                     },
                     iridium: {
-                        "price": 190,
+                        "price": 500,
                         "chance": 0.56665,
                         "coopchance": 0.73315
                     }
@@ -214,9 +214,9 @@ const animalData = {
                     }
                 }
             },
-            duckfeather: {
+            rabbitfoot: {
                 "name": "Rabbit's Foot",
-                "days": 2,
+                "days": 4,
                 "chance": 0.2765,
                 quality: {
                     basic: {

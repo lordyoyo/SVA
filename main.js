@@ -38,6 +38,7 @@ window.onload = function () {
         input.onchange = refresh;
     };
     updateprofessions();
+    posSet();
 };
 
 function getaninums() {
@@ -177,17 +178,24 @@ function calculate(aninums, profs, seasons, settings) {
         if (key.startsWith('num_') && aninums[key] > 0) {
             const animalName = key.replace('num_', '');
             for (const produceKey in animalData[animalName].produce) {
-                const produce = animalData[animalName].produce[produceKey]
+                const produce = animalData[animalName].produce[produceKey];
                 if (produce.chance > 0) {
-                    let seas = seasons.num_months; //needs to be fiddled with for pigs
-                    let days = 28; //needs to be fiddled with for pigs
-                    //produce.days sheeps tho;
-                    //produce.chance;
-                    //aninums[key] pigs tho gath
-                    let baseMulti = seas * days * produce.chance / produce.days * aninums[key];
+                    let dayMulti = 28 * seasons.num_months;
+                    if (animalName == "pig") {
+                        dayMulti = seasons.Spring * 22.608 + seasons.Summer * 22.259 + seasons.Fall * 23.425;
+                    }
+                    let produceDays = produce.days;
+                    if ("shepdays" in produce && profs.shep) {
+                        produceDays = produce.shepdays;
+                    }
+                    let aniNumber = aninums[key];
+                    if (profs.gath && animalName == "pig") {
+                        aniNumber = 1.2 * aninums[key];
+                    }
+                    let baseMulti = dayMulti * produce.chance / produceDays * aniNumber;
                     let craftKey = `craft_${animalName}`;
-                    var subtotal = 0;
-                    var tableProduct = produce.name;
+                    let subtotal = 0;
+                    let tableProduct = produce.name;
                     for (const qK in produce.quality) {
                         const thisQ = produce.quality[qK];
                         let qualchance = thisQ.chance;
@@ -247,28 +255,24 @@ function calculate(aninums, profs, seasons, settings) {
                             let procI = thisQ.processed.result.split(".");
                             let processedItem = produceData[procI[0]].quality[procI[1]];
                             let pValue = processedItem.price;
-                            console.log("pValue: ",pValue);
                             if (profs.arti) {
-                                pValue = Math.floor(pValue * 1.4);
+                                pValue = Math.trunc(pValue * 14 /10);
                             } else if (profs.ranc && procI[0] != "truffleoil") {
-                                pValue = Math.floor(pValue * 1.2);
+                                pValue = Math.trunc(pValue * 12 / 10);
                             }
+                            console.log("pValue: ", pValue);
                             subprice = pValue * thisQ.processed.quantity;
                             tableProduct = produceData[procI[0]].name;
                         } else {
                             if (profs.ranc && produce.name != "Truffle") {
-                                subprice = Math.floor(1.2 * thisQ.price);
+                                subprice = Math.trunc(12 * thisQ.price /10);
                             } else subprice = thisQ.price;
                         }
                         subtotal = subtotal + subprice * qualchance * baseMulti;
-                        console.log("subtotal: ", subtotal/112);
+                        console.log("subtotal ", qK, " : ", subtotal);
                     }
-                    let subtotPD = subtotal / seas / days;
-                    anilist.push([animalData[animalName].name, tableProduct, Math.floor(subtotal), Math.floor(subtotPD)]);
-                    /*                            const displayValue = (weightedPrice * produceChance) / produceDays * aninums[key];
-                                                const finalProducePrice = displayValue * 28 * seasons.num_months;
-                                                anilist.push([produce.name, Math.floor(finalProducePrice), Math.floor(displayValue)]);
-                                                break;*/
+                    let subtotPD = subtotal / seasons.num_months / 28;
+                    anilist.push([animalData[animalName].name, tableProduct, Math.trunc(subtotal), Math.trunc(subtotPD)]);
                 }
             }
         }
@@ -297,7 +301,7 @@ function calculate(aninums, profs, seasons, settings) {
         grandTotal = grandTotal + item[2];
     }
     document.getElementById("mainProfits").innerHTML = grandTotal;
-    document.getElementById("mainPerDay").innerHTML = Math.floor(grandTotal/28/seasons.num_months);
+    document.getElementById("mainPerDay").innerHTML = Math.trunc(grandTotal / 28 / seasons.num_months);
 }
 
 function anifix() {
@@ -325,6 +329,13 @@ function anifix() {
             }
         }
     });
+}function posSet() {
+    const footer = document.querySelector('.footer');
+    const settings = document.querySelector('.settings');
+    if (footer && settings) {
+        const footerHeight = footer.offsetHeight; // Gets the rendered height
+        settings.style.bottom = `${footerHeight}px`;
+    }
 }
 
 //console.log(Object.keys(animalData).length);

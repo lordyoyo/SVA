@@ -49,6 +49,9 @@ a:hover {
 }
 
 .settings {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     margin: auto;
     width: 900px;
