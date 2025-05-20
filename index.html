@@ -11,6 +11,45 @@
 <body>
     <script src="data.js"> </script>
     <div id="title"></div>
+    <button id="help-button">
+        <img src="img/HelpCrop.png" alt="Help">
+    </button>
+
+    <div id="help-overlay" class="hidden">
+        <div id="help-content">
+            <button id="close-help-button" class="close-button">&times;</button>
+            <p>Welcome to the Stardew Valley Animal Profit Calculator! This tool helps you estimate your daily and seasonal earnings from your farm animals.</p>
+            <p>The calculations assume an average daily luck of 0 and maximum friendship and happiness with all animals.</p>
+            <h3>Sections:</h3>
+            <h4>Results Table on top (empty by default):</h4>
+            <ul>
+                <li><strong>Animal:</strong> The animal producing the product.</li>
+                <li><strong>Product:</strong> The name of the raw or processed product.</li>
+                <li><strong>Profit (Total for product):</strong> Your estimated total profit from that animal's products over the selected seasons.</li>
+                <li><strong>Profit (Per Day):</strong> Your estimated average daily profit from that animal's products.
+                </li>
+            </ul>
+            <h4>Animal Inputs:</h4>
+            <ul>
+                <li><strong>Number of Animals:</strong> Input how many of each animal you own, after the name of the animal.</li>
+                <li><strong>Golden Animal Crackers</strong> You can enter the amount of animals that have been given a cracker, doubling their output.</li>
+                <li><strong>"Craft?" Checkbox:</strong> If checked, the calculator assumes you will process all applicable products from that animal into artisan goods. If unchecked, the products will be sold raw.</li>
+            </ul>
+            <h4>Players & Professions:</h4>
+            <ul>
+                <li><strong>Players:</strong> Select 1 to 8 players to adjust profession rules.</li>
+                <li><strong>Artisan:</strong> +40% selling price for artisan goods (e.g., Mayonnaise, Cheese).</li>
+                <li><strong>Rancher:</strong> +20% selling price for animal products (e.g., Eggs, Milk, Wool, but NOT Truffles). Also raises most artisan good prices.</li>
+                <li><strong>Coopmaster:</strong> Increases quality chances for coop animals (Eggs, Duck Feathers, Rabbit's Foot, Dinosaur Eggs, etc.).</li>
+                <li><strong>Shepherd:</strong> Sheep produce wool faster and increases quality chances for sheep.</li>
+                <li><strong>Gatherer:</strong> Chance for double harvest of foraged items (Truffles).</li>
+                <li><strong>Botanist:</strong> Foraged items (Truffles) are always iridium quality.</li>
+                <li><strong>Smart:</strong> (Currently not implemented, probably will add Treasure Hunter Manual here).</li>
+            </ul>
+            <h4>Seasons:</h4>
+            <p>Check the seasons you plan to have active for animal production. Note that pigs only find truffles on non-rainy Spring, Summer, and Fall days.</p>
+        </div>
+    </div>
     <script src="main.js"></script>
     <div id="maindiv">
         <table id="maintable">
@@ -150,7 +189,7 @@
                 <td><input type="checkbox" id="check_botanist"></td>
             </tr>
             <tr>
-                <td>Smart Processing</td>
+                <td>Smart</td>
                 <td><input type="checkbox" id="check_smart" disabled></td>
             </tr>
             <tr>
@@ -175,10 +214,7 @@
         </table>
     </div>
     <div class="footer">
-        <p><a href="http://stardewvalley.net/" target="_blank">Stardew Valley v1.6.15</a> &copy; <a
-                href="https://twitter.com/ConcernedApe" target="_blank">ConcernedApe</a> | Site by <a
-                href="https://www.youtube.com/@gaemplays" target="_blank">Yoyo</a> | Art by <a
-                href="https://www.instagram.com/mattiscribbles/" target="_blank">Blanka</a></p>
+        <p><a href="http://stardewvalley.net/" target="_blank">Stardew Valley v1.6.15</a> &copy; <a href="https://twitter.com/ConcernedApe" target="_blank">ConcernedApe</a> | Created by <a href="https://www.youtube.com/@gaemplays" target="_blank">Yoyo</a> and <a href="https://www.instagram.com/mattiscribbles/" target="_blank">Blanka</a></p>
     </div>
 </body>
 

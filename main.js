@@ -39,6 +39,31 @@ window.onload = function () {
     };
     updateprofessions();
     posSet();
+    // --- HELP OVERLAY JAVASCRIPT ---
+    const helpButton = document.getElementById('help-button');
+    const helpOverlay = document.getElementById('help-overlay');
+    const closeHelpButton = document.getElementById('close-help-button');
+
+    helpButton.addEventListener('click', () => {
+        helpOverlay.classList.remove('hidden');
+        // Optional: Disable scrolling on the body when overlay is open
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeHelpButton.addEventListener('click', () => {
+        helpOverlay.classList.add('hidden');
+        // Optional: Re-enable scrolling on the body when overlay is closed
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close when clicking outside the content (on the overlay itself)
+    helpOverlay.addEventListener('click', (event) => {
+        if (event.target === helpOverlay) {
+            helpOverlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    });
+    // --- END HELP OVERLAY JAVASCRIPT ---
 };
 
 function getaninums() {
@@ -256,7 +281,7 @@ function calculate(aninums, profs, seasons, settings) {
                             let processedItem = produceData[procI[0]].quality[procI[1]];
                             let pValue = processedItem.price;
                             if (profs.arti) {
-                                pValue = Math.trunc(pValue * 14 /10);
+                                pValue = Math.trunc(pValue * 14 / 10);
                             } else if (profs.ranc && procI[0] != "truffleoil") {
                                 pValue = Math.trunc(pValue * 12 / 10);
                             }
@@ -265,7 +290,7 @@ function calculate(aninums, profs, seasons, settings) {
                             tableProduct = produceData[procI[0]].name;
                         } else {
                             if (profs.ranc && produce.name != "Truffle") {
-                                subprice = Math.trunc(12 * thisQ.price /10);
+                                subprice = Math.trunc(12 * thisQ.price / 10);
                             } else subprice = thisQ.price;
                         }
                         subtotal = subtotal + subprice * qualchance * baseMulti;
@@ -329,7 +354,7 @@ function anifix() {
             }
         }
     });
-}function posSet() {
+} function posSet() {
     const footer = document.querySelector('.footer');
     const settings = document.querySelector('.settings');
     if (footer && settings) {
