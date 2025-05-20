@@ -4,6 +4,16 @@ tables
 footer to be bottom floaty
 */
 
+@keyframes qbox {
+    from {
+        transform: rotate(-10deg);
+    }
+
+    to {
+        transform: rotate(10deg);
+    }
+}
+
 body {
     background: #000000 no-repeat center top fixed;
     -webkit-background-size: cover;
@@ -105,10 +115,14 @@ a:hover {
     height: 0px;
     background-color: transparent;
     padding: 0;
-    border:0;
+    border: 0;
     cursor: pointer;
     z-index: 100;
     /* Very high z-index to be on top */
+    animation-name: qbox;
+    animation-duration: 2s;
+    animation-iteration-count: 10;
+    animation-direction: alternate;
 }
 
 #help-button:hover {
